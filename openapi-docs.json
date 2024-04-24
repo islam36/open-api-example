@@ -1,0 +1,94 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "open api test",
+    "description": "lorem ipsum",
+    "version": "0.0.1"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8000",
+      "description": "local server"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "Task": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "title": {
+            "type": "string"
+          },
+          "finished": {
+            "type": "boolean",
+            "default": "false"
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/": {
+      "get": {
+        "tags": ["main"],
+        "summary": "hello world",
+        "responses": {
+          "200": {
+            "description": "returns hello world"
+          }
+        }
+      }
+    },
+    "/tasks": {
+      "get": {
+        "tags": ["task"],
+        "summary": "get all tasks",
+        "responses": {
+          "200": {
+            "description": "returns the list of all tasks",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Task"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["task"],
+        "summary": "insert a task",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/Task"
+                  }
+                ],
+                "required": ["title", "finished"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "task created succussfully"
+          },
+          "400": {
+            "description": "invalid input"
+          }
+        }
+      }
+    }
+  }
+}
